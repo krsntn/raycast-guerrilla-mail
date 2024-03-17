@@ -87,7 +87,7 @@ export default function Inbox({ email }: { email: string }) {
                   />
                   <Action
                     title="Refresh"
-                    icon={{ source: Icon.Repeat, tintColor: Color.Green }}
+                    icon={{ source: Icon.Repeat }}
                     shortcut={{ modifiers: ["cmd"], key: "r" }}
                     onAction={async () => {
                       await showToast(Toast.Style.Animated, "Refreshing...");
