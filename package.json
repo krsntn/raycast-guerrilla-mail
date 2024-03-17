@@ -2,10 +2,11 @@
   "$schema": "https://www.raycast.com/schemas/extension.json",
   "name": "guerrilla-mail",
   "title": "Guerrilla Mail",
-  "description": "Generate a disposable temporary email address and quickly access any received emails",
+  "description": "Generate a disposable temporary email address and quickly access any received emails - powered by Guerrilla Mail API",
   "icon": "logo.png",
   "author": "krsntn",
   "categories": [
+    "Productivity",
     "Communication",
     "Web"
   ],

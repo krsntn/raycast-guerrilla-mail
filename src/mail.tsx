@@ -1,5 +1,5 @@
 import { NodeHtmlMarkdown, NodeHtmlMarkdownOptions } from "node-html-markdown";
-import { Action, ActionPanel, Detail } from "@raycast/api";
+import { Detail } from "@raycast/api";
 import { useFetch } from "@raycast/utils";
 import { BASE_URL, FETCH_EMAIL } from "./utils/endPoints";
 
@@ -29,10 +29,11 @@ type EmailDataType = {
 
 export default function Mail({ email_id, sid_token }: { email_id: string; sid_token: string }) {
   const url = `${BASE_URL}${FETCH_EMAIL}&email_id=${email_id}`;
-  const { isLoading, data }: { isLoading: boolean; data: EmailDataType } = useFetch(url, {
+  const { isLoading, data } = useFetch<EmailDataType>(url, {
     headers: {
       Cookie: "PHPSESSID=" + sid_token,
     },
+    mapResult: (data) => ({ data }),
   });
 
   return (
