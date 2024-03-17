@@ -1,7 +1,8 @@
-import { Icon, ActionPanel, List, Action, Color, showToast, Toast } from "@raycast/api";
+import { Icon, ActionPanel, List, Action, Color, showToast, Toast, LocalStorage } from "@raycast/api";
 import { useFetch } from "@raycast/utils";
 import { BASE_URL, GET_EMAIL_LIST, SET_EMAIL_ADDRESS } from "./utils/endPoints";
 import Mail from "./mail";
+import { useEffect } from "react";
 
 type EmailAccountDataType = {
   alias_error: string;
@@ -32,6 +33,7 @@ type EmailDataType = {
 type EmailListDataType = {
   list: EmailDataType[];
   sid_token: string;
+  count: string;
 };
 
 export default function Inbox({ email }: { email: string }) {
@@ -43,22 +45,32 @@ export default function Inbox({ email }: { email: string }) {
     isLoading: isEmailListLoading,
     data: emailListData,
     revalidate,
-  }: { isLoading: boolean; data: EmailListDataType } = useFetch(checkEmailUrl, {
+  } = useFetch<EmailListDataType>(checkEmailUrl, {
     headers: {
       Cookie: "PHPSESSID=" + emailAccountData?.sid_token,
     },
-    execute: !!emailAccountData?.email_addr,
+    mapResult: (data) => ({ data }),
+    execute: emailAccountData?.sid_token ? true : false,
   });
+
+  useEffect(() => {
+    async function orderEmails() {
+      const emailStore = await LocalStorage.getItem<string>("emails");
+      const emails = emailStore ? JSON.parse(emailStore) : [];
+      await LocalStorage.setItem("emails", JSON.stringify(Array.from(new Set([email, ...emails]))));
+    }
+    orderEmails();
+  }, []);
 
   return (
     <List isLoading={isEmailAccountLoading || isEmailListLoading}>
-      <List.Section title="Email">
+      <List.Section title="Email" subtitle={emailListData?.count}>
         {!isEmailAccountLoading &&
           !isEmailListLoading &&
-          emailListData?.list.map((email: EmailDataType, index: number) => (
+          emailListData?.list.map((email, index) => (
             <List.Item
               key={index}
-              icon={{ source: Icon.Bubble, tintColor: "#A9C939" }}
+              icon={{ source: Icon.Envelope, tintColor: "#A9C939" }}
               title={email.mail_from}
               subtitle={email.mail_subject !== "" ? email.mail_subject : "No Subject"}
               accessories={[
@@ -75,11 +87,11 @@ export default function Inbox({ email }: { email: string }) {
                   />
                   <Action
                     title="Refresh"
-                    icon={{ source: Icon.Trash, tintColor: Color.Green }}
+                    icon={{ source: Icon.Repeat, tintColor: Color.Green }}
                     shortcut={{ modifiers: ["cmd"], key: "r" }}
                     onAction={async () => {
                       await showToast(Toast.Style.Animated, "Refreshing...");
-                      await revalidate();
+                      revalidate();
                       await showToast(Toast.Style.Success, "Refreshed");
                     }}
                   />

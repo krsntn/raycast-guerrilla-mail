@@ -2,7 +2,7 @@
   "$schema": "https://www.raycast.com/schemas/extension.json",
   "name": "guerrilla-mail",
   "title": "Guerrilla Mail",
-  "description": "Generate a temporary email address and quickly access any received emails",
+  "description": "Generate a disposable temporary email address and quickly access any received emails",
   "icon": "logo.png",
   "author": "krsntn",
   "categories": [
@@ -13,14 +13,14 @@
   "commands": [
     {
       "name": "generate_random_email_address",
-      "title": "Generate random email address",
-      "description": "Create a randomly generated temporary email address",
+      "title": "Generate Random Email Address",
+      "description": "Swiftly generate a randomly generated temporary email address",
       "mode": "no-view"
     },
     {
       "name": "create_email_address",
-      "title": "Create email address",
-      "description": "Create a temporary email address",
+      "title": "Create Email Address",
+      "description": "Create a temporary email address with a custom username",
       "mode": "no-view",
       "arguments": [
         {
@@ -33,7 +33,7 @@
     },
     {
       "name": "email_accounts",
-      "title": "Email inbox",
+      "title": "Email Inbox",
       "description": "View email inbox",
       "mode": "view"
     }

@@ -14,11 +14,11 @@ export default async function Command() {
       throw new Error("Failed to generate email");
     }
 
-    const emailStore = await LocalStorage.getItem("emails");
-    const emails = emailStore ? JSON.parse(emailStore as string) : [];
+    const emailStore = await LocalStorage.getItem<string>("emails");
+    const emails = emailStore ? JSON.parse(emailStore) : [];
 
     await Clipboard.copy(emailAddress);
-    await LocalStorage.setItem("emails", JSON.stringify([...Array.from(new Set(emails)), emailAddress]));
+    await LocalStorage.setItem("emails", JSON.stringify([...Array.from(new Set([emailAddress, ...emails]))]));
     await showHUD(`✅ Copied ${emailAddress} to clipboard`);
   } catch (error) {
     await showHUD("❌ Failed to generate email");
